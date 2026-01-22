@@ -34,5 +34,8 @@ extern const int i2c_baudrate;
 extern const uint8_t bme_slave_addr;
 extern const uint8_t bme_id_register;
 
+/* MPU6050 */
+extern const uint8_t mpu_slave_addr;
+extern const uint8_t mpu_id_register;
 
 #endif
