@@ -1,0 +1,5 @@
+CompileFlags:
+  Add:
+    - "-I$HOME/Documents/pico-sdk/src/rp2_common/pico_stdlib/include"
+    - "-isystem /usr/arm-none-eabi/include"
+

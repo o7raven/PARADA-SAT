@@ -1,0 +1,4 @@
+#define NOT_AVAILABLE 0x00
+
+#define AVAILABLE 0x01 
+#define SUCCESS 0x01

@@ -1,1 +1,0 @@
-# PARADA-SAT
