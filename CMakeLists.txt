@@ -9,7 +9,10 @@ pico_sdk_init()
 add_executable(parada
     src/main.c
     lib/BME280_SensorAPI/bme280.c
-    src/common.c
+    src/bme280_driver.c
+    src/system_init.c
+    src/mpu6050_driver.c
+    src/gps_driver.c
 )
 target_include_directories(parada PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/include

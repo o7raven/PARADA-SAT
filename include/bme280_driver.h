@@ -16,16 +16,23 @@
 */
 
 
-#ifndef _COMMON_H
-#define _COMMON_H
+#ifndef _BME280_DRIVER
+#define _BME280_DRIVER
 
 /*! CPP guard */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+
+#include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
+
+#include "config.h"
+#include "hardware/i2c.h"
 #include "bme280.h"
+#include "pico/stdlib.h"
 
 /***************************************************************************/
 
@@ -98,6 +105,11 @@ int8_t bme280_i2c_select(struct bme280_dev *dev);
  *  @return void.
  */
 void bme280_error_codes_print_result(const char api_name[], int8_t rslt);
+
+void bme280_initialize_full(struct bme280_dev* dev);
+void bme280_load_data(struct bme280_dev* dev, struct bme280_data* comp_data);
+int8_t bme280_scan(uint32_t period, struct bme280_dev *dev, struct bme280_data* comp_data);
+
 #ifdef __cplusplus
 }
 #endif /* End of CPP guard */
