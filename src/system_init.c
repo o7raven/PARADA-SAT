@@ -13,7 +13,7 @@ void sys_init(){
     gpio_set_dir(LED_PIN, OUTPUT);
 
     gpio_put(LED_PIN, 1);
-    sleep_ms(5000);
+    sleep_ms(1000);
     gpio_put(LED_PIN, 0);
     printf("Complete\n");
 }

@@ -40,6 +40,7 @@
  * @brief Sensor driver for BME280 sensor
  */
 #include "bme280.h"
+#include "bme280_defs.h"
 
 /**\name Internal macros */
 /* To identify osr settings selected by user */
@@ -413,30 +414,24 @@ static uint32_t compensate_humidity(const struct bme280_uncomp_data *uncomp_data
 #include <stdio.h>
 int8_t bme280_init(struct bme280_dev *dev)
 {
-    printf("inside init\n");
     int8_t rslt;
     uint8_t chip_id = 0;
 
     /* Read the chip-id of bme280 sensor */
     rslt = bme280_get_regs(BME280_REG_CHIP_ID, &chip_id, 1, dev);
-    printf("got regs\n");
 
     /* Check for chip id validity */
     if (rslt == BME280_OK)
     {
-    printf("bme ok\n");
         if (chip_id == BME280_CHIP_ID)
         {
-    printf("chip id ok\n");
             dev->chip_id = chip_id;
 
             /* Reset the sensor */
             rslt = bme280_soft_reset(dev);
-    printf("sensor reset\n");
 
             if (rslt == BME280_OK)
             {
-    printf("yes\n");
                 /* Read the calibration data */
                 rslt = get_calib_data(dev);
             }
@@ -458,9 +453,7 @@ int8_t bme280_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, struct
     int8_t rslt;
 
     /* Check for null pointer in the device structure */
-    printf("getting res before\n");
     rslt = null_ptr_check(dev);
-    printf("getting res after\n");
 
     if ((rslt == BME280_OK) && (reg_data != NULL))
     {
@@ -470,11 +463,9 @@ int8_t bme280_get_regs(uint8_t reg_addr, uint8_t *reg_data, uint32_t len, struct
             reg_addr = reg_addr | 0x80;
         }
 
-    printf("before reading\n");
         /* Read the data */
         dev->intf_rslt = dev->read(reg_addr, reg_data, len, dev->intf_ptr);
 
-    printf("afte reading\n");
         /* Check for communication error */
         if (dev->intf_rslt != BME280_INTF_RET_SUCCESS)
         {
@@ -850,7 +841,7 @@ int8_t bme280_cal_meas_delay(uint32_t *max_delay, const struct bme280_settings *
         (*max_delay) =
             (uint32_t)((BME280_MEAS_OFFSET + (BME280_MEAS_DUR * temp_osr) +
                         ((BME280_MEAS_DUR * pres_osr) + BME280_PRES_HUM_MEAS_OFFSET) +
-                        ((BME280_MEAS_DUR * hum_osr) + BME280_PRES_HUM_MEAS_OFFSET)));
+                        ((BME280_MEAS_DUR * hum_osr) + BME280_PRES_HUM_MEAS_OFFSET)))/BME280_MEAS_SCALING_FACTOR;
     }
     else
     {

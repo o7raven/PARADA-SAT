@@ -113,27 +113,17 @@ int8_t bme280_i2c_select(struct bme280_dev *dev)
 {
     sleep_ms(chip_access_delay_ms);
     int8_t rslt = BME280_OK;
-    printf("inside select\n");
-
     if (dev != NULL)
     {
-    printf("dev exists\n");
         dev_addr = BME280_I2C_ADDR_PRIM;
-    printf("addr exists\n");
         dev->read = bme280_i2c_read;
-    printf("read xists\n");
         dev->write = bme280_i2c_write;
 
     bme280_read_fptr_t read;
-    printf("write dev exists\n");
         dev->intf = BME280_I2C_INTF;
-    printf("intf dev exists\n");
-
         dev->intf_ptr = &dev_addr;
 
-    sleep_ms(100);
-    printf("intf ddelay exists\n");
-        /* Configure delay in microseconds */
+        sleep_ms(100);
         dev->delay_us = bme280_delay_us;
     }
     else
@@ -150,52 +140,28 @@ int8_t bme280_scan(uint32_t period, struct bme280_dev *dev, struct bme280_data* 
     int8_t idx = 0;
     uint8_t status_reg;
 
-    //while (idx < BME280_SAMPLE_RATE){
         result = bme280_get_regs(BME280_REG_STATUS, &status_reg, 1, dev);
         bme280_error_codes_print_result("bme280_get_regs", result);
         if(status_reg & BME280_STATUS_MEAS_DONE){
             dev->delay_us(period, dev->intf_ptr);
-
             result = bme280_get_sensor_data(BME280_TEMP|BME280_HUM|BME280_PRESS, comp_data, dev);
-            bme280_error_codes_print_result("bme280_get_sensor_data", result);
-
-
-#ifdef LOG
-#ifndef BME280_DOUBLE_ENABLE
-            comp_data.temperature = comp_data.temperature / 100;
-#endif
-
-#ifdef BME280_DOUBLE_ENABLE
-#else
-            printf("Temperature[%d]:   %ld deg C\n", idx, (long int)comp_data.temperature);
-#endif
-#endif
-        //    idx++;
-       // }
     }
     return result;
 }
 
 void bme280_load_data(struct bme280_dev* dev, struct bme280_data* comp_data){
-    printf("Getting temp\n");
     uint8_t result = bme280_scan(period, dev, comp_data);
-    bme280_error_codes_print_result("get_temperature", result);
 }
 void bme280_initialize_full(struct bme280_dev* dev){
     int8_t result;
     struct bme280_settings settings;
 
-    printf("1\n");
-
     result = bme280_i2c_select(dev);
     bme280_error_codes_print_result("bme280_i2c_selection", result);
 
-    printf("2\n");
     result = bme280_init(dev);
-    printf("result: %d\n", result);
     bme280_error_codes_print_result("bme280_init", result);
 
-    printf("3\n");
     settings.filter = BME280_FILTER_COEFF_2;
     settings.osr_h = BME280_OVERSAMPLING_1X;
     settings.osr_p = BME280_OVERSAMPLING_1X;
@@ -203,15 +169,12 @@ void bme280_initialize_full(struct bme280_dev* dev){
 
     settings.standby_time = BME280_STANDBY_TIME_0_5_MS;
 
-    printf("4\n");
     result = bme280_set_sensor_settings(BME280_SEL_ALL_SETTINGS, &settings, dev);
     bme280_error_codes_print_result("bme280_set_sensor_settings", result);
 
-    printf("5\n");
     result = bme280_set_sensor_mode(BME280_POWERMODE_NORMAL, dev);
     bme280_error_codes_print_result("bme280_set_sensor_mode", result);
 
-    printf("6\n");
     result = bme280_cal_meas_delay(&period, &settings);
     bme280_error_codes_print_result("bme280_cal_meas_delay", result);
 }

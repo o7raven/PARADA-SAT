@@ -8,7 +8,7 @@ void mpu6050_initialize_full(void){
     uint8_t data[1];
     i2c_read_blocking(I2C_PORT, mpu_slave_addr, data, 1, false);
     
-    printf("chip id: 0x%X", data[0]);
+    printf("[+] --- MPU6050 Chip id: 0x%X", data[0]);
     if(data[0] == mpu_chip_id){
         // wake up device
         uint8_t buffer[2] = {mpu_pwr_mgmt_reg, 0x00};
@@ -31,7 +31,7 @@ void mpu6050_initialize_full(void){
         i2c_write_blocking(I2C_PORT, mpu_slave_addr, buffer, 2, false);
         
     }else{
-        printf("chip not found");
+        printf("[!] --- MPU6050 Chip not found");
     }
 
 }
@@ -40,6 +40,7 @@ void mpu6050_load_data(mpu_data* mpu_d){
     int16_t i16_accX;
     int16_t i16_accY;
     int16_t i16_accZ;
+
     int16_t i16_gyroX;
     int16_t i16_gyroY;
     int16_t i16_gyroZ;
@@ -55,7 +56,7 @@ void mpu6050_load_data(mpu_data* mpu_d){
     i16_accX = (acc_data[0]<<8)| acc_data[1];
     i16_accY  = (acc_data[2]<<8) | acc_data[3];
     i16_accZ = (acc_data[4]<<8) | acc_data[5];
-    mpu_d->acc_X = ACC_LSB_SENSITIVITY;
+    mpu_d->acc_X = i16_accX/ACC_LSB_SENSITIVITY;
     mpu_d->acc_Y = i16_accY/ACC_LSB_SENSITIVITY;
     mpu_d->acc_Z= i16_accZ/ACC_LSB_SENSITIVITY;
 
