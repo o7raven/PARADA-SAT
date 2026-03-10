@@ -17,6 +17,8 @@
 #include "mpu6050_driver.h"
 #include "gps_driver.h"
 
+#include "telemetry.h"
+
 
 
 int main(void) {
@@ -29,11 +31,11 @@ int main(void) {
     bme280_initialize_full(&dev);
 
     mpu_data mpu_d;
-    mpu6050_initialize_full();
+    mpu6050_initialize_full(); 
 
 
-    //gps_initialize();
-    //char gps_line[128];
+    gps_initialize();
+    gps_data_t gps_d;
 
     while(1){
         // fix magic number
@@ -48,12 +50,13 @@ int main(void) {
         printf("[BME]Humidity:   %lf %%RH\n", comp_data.humidity);
         printf("[BME]Pressure:  %lf Pa", comp_data.pressure);
         printf("\n-----------------------------\n");
-       /* if (gps_read_line(gps_line, sizeof(gps_line))) {
-            printf("GPS: %s\n", gps_line);
-        }else {
-            printf("\nGps FAILED\n");
-        }
-        */
+
+        gps_update(&gps_d);
+        printf("GPS lat lon : %d %d\n", gps_d.lat, gps_d.lon);
+
+        telemetry_packet_t packet = create_packet(&mpu_d, &comp_data, &gps_d);
+        send_packet(&packet);
+
         sleep_ms(450);
     }
 

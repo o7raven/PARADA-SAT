@@ -17,7 +17,6 @@ void mpu6050_initialize_full(void){
         buffer[1] = PLL_X_GYRO;
         i2c_write_blocking(I2C_PORT, mpu_slave_addr, buffer, 2, false);
 
-        // accel config
         buffer[0] = mpu_accel_config_reg;
         buffer[1] = AFS_SEL;
         i2c_write_blocking(I2C_PORT, mpu_slave_addr, buffer, 2, false);

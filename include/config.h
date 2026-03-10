@@ -79,4 +79,11 @@ static const uint8_t gyro_reg_len = 6;
 #define GPS_RX_PIN 9
 #define GPS_BAUD 9600
 
+/* 
+    Telemetry config
+*/
+#define PACKET_SCALE 100 // Defines the accuracy of floats over UART
+
+
+
 #endif
