@@ -1,5 +1,4 @@
 #include "mpu6050_driver.h"
-#include "config.h"
 
 void mpu6050_initialize_full(void){
     sleep_ms(chip_access_delay_ms);
@@ -36,6 +35,7 @@ void mpu6050_initialize_full(void){
 }
 
 void mpu6050_load_data(mpu_data* mpu_d){
+    debugLED(wLED);
     int16_t i16_accX;
     int16_t i16_accY;
     int16_t i16_accZ;
@@ -66,5 +66,6 @@ void mpu6050_load_data(mpu_data* mpu_d){
     mpu_d->gyro_X = i16_gyroX/GYRO_LSB_SENSITIVITY;
     mpu_d->gyro_Y = i16_gyroY/GYRO_LSB_SENSITIVITY;
     mpu_d->gyro_Z = i16_gyroZ/GYRO_LSB_SENSITIVITY;
+    debugLED(sLED);
 }
 

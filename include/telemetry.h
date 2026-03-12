@@ -5,25 +5,15 @@
 #include "mpu6050_driver.h"
 #include "bme280_driver.h"
 #include "gps_driver.h"
+#include "debug.h"
 
 typedef struct __attribute__((packed)){
     uint16_t packet_id;
-
-    int16_t acc_x;
-    int16_t acc_y;
-    int16_t acc_z;
-
-    int16_t gyro_x;
-    int16_t gyro_y;
-    int16_t gyro_z;
-
-    int16_t temp;
-    int16_t humidity;
+    int16_t acc_x, acc_y, acc_z;
+    int16_t gyro_x, gyro_y, gyro_z;
+    int16_t temp, humidity;
     int32_t pressure;
-
-    int32_t gps_lat;
-    int32_t gps_lon;
-
+    int32_t gps_lat, gps_lon;
     uint16_t crc16;
 } telemetry_packet_t;
 

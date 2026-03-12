@@ -14,6 +14,7 @@
  * Date: 22.01.2026
  */
 #include "bme280_driver.h"
+#include "debug.h"
 
 /******************************************************************************/
 /*!                               Macros                                      */
@@ -82,25 +83,30 @@ void bme280_error_codes_print_result(const char api_name[], int8_t rslt)
                 printf("Error [%d] : Null pointer error.", rslt);
                 printf(
                     "It occurs when the user tries to assign value (not address) to a pointer, which has been initialized to NULL.\r\n");
+                debugLED(eLED);
                 break;
 
             case BME280_E_COMM_FAIL:
                 printf("Error [%d] : Communication failure error.", rslt);
                 printf(
                     "It occurs due to read/write operation failure and also due to power failure during communication\r\n");
+                debugLED(eLED);
                 break;
 
             case BME280_E_DEV_NOT_FOUND:
                 printf("Error [%d] : Device not found error. It occurs when the device chip id is incorrectly read\r\n",
                        rslt);
+                debugLED(eLED);
                 break;
 
             case BME280_E_INVALID_LEN:
                 printf("Error [%d] : Invalid length error. It occurs when write is done with invalid length\r\n", rslt);
+                debugLED(eLED);
                 break;
 
             default:
                 printf("Error [%d] : Unknown error code\r\n", rslt);
+                debugLED(eLED);
                 break;
         }
     }
@@ -129,6 +135,7 @@ int8_t bme280_i2c_select(struct bme280_dev *dev)
     else
     {
         rslt = BME280_E_NULL_PTR;
+        debugLED(eLED);
     }
 
     return rslt;
@@ -151,8 +158,10 @@ int8_t bme280_scan(uint32_t period, struct bme280_dev *dev, struct bme280_data* 
 
 void bme280_load_data(struct bme280_dev* dev, struct bme280_data* comp_data){
     uint8_t result = bme280_scan(period, dev, comp_data);
+
 }
 void bme280_initialize_full(struct bme280_dev* dev){
+    debugLED(wLED);
     int8_t result;
     struct bme280_settings settings;
 
@@ -177,5 +186,6 @@ void bme280_initialize_full(struct bme280_dev* dev){
 
     result = bme280_cal_meas_delay(&period, &settings);
     bme280_error_codes_print_result("bme280_cal_meas_delay", result);
+    debugLED(sLED);
 }
 

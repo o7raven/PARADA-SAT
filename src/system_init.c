@@ -3,6 +3,7 @@
 
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
+#include <hardware/gpio.h>
 #include <stdio.h>
 
 
@@ -13,8 +14,26 @@ void sys_init(){
     gpio_set_dir(LED_PIN, OUTPUT);
 
     gpio_put(LED_PIN, 1);
+
+    gpio_init(sLED);
+    gpio_init(wLED);
+    gpio_init(eLED);
+
+    gpio_set_dir(sLED, OUTPUT);
+    gpio_set_dir(wLED, OUTPUT);
+    gpio_set_dir(eLED, OUTPUT);
+
+    gpio_put(sLED, 1);
+    gpio_put(wLED, 1);
+    gpio_put(eLED, 1);
+
     sleep_ms(1000);
+    
     gpio_put(LED_PIN, 0);
+    gpio_put(sLED, 0);
+    gpio_put(wLED, 0);
+    gpio_put(eLED, 0);
+
     printf("Complete\n");
 }
 

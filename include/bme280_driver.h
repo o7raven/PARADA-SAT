@@ -33,6 +33,7 @@ extern "C" {
 #include "hardware/i2c.h"
 #include "bme280.h"
 #include "pico/stdlib.h"
+#include "debug.h"
 
 /***************************************************************************/
 

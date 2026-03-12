@@ -2,6 +2,7 @@
 #include <string.h>
 telemetry_packet_t create_packet(mpu_data *mpu_d, struct bme280_data *bme_d, 
                                     gps_data_t *gps_d){
+    debugLED(wLED);
     static uint16_t _id = 1;
     telemetry_packet_t packet = {
         _id++,
@@ -23,7 +24,9 @@ telemetry_packet_t create_packet(mpu_data *mpu_d, struct bme280_data *bme_d,
         0
     };
     packet.crc16 = crc16((uint8_t*)&packet, sizeof(packet)-sizeof(packet.crc16));
+    debugLED(sLED);
     return packet;
+     
 }
 
 uint16_t crc16(const uint8_t *data, size_t len)
@@ -46,6 +49,7 @@ uint16_t crc16(const uint8_t *data, size_t len)
 
 #define SYNC 0xAA55
 void send_packet(telemetry_packet_t *packet){
+    debugLED(wLED);
     uint8_t buff[64];
     size_t i = 0;
     const uint8_t len = sizeof(telemetry_packet_t);
@@ -58,4 +62,5 @@ void send_packet(telemetry_packet_t *packet){
     i += len;
 
     uart_write_blocking(uart0, buff, i);
+    debugLED(sLED);
 }

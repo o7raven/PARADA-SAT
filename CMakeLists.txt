@@ -14,6 +14,7 @@ add_executable(parada
     src/mpu6050_driver.c
     src/gps_driver.c
     src/telemetry.c
+    src/debug.c
 )
 target_include_directories(parada PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/include

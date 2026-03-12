@@ -26,6 +26,10 @@
 #define i2c0_SDA 4
 #define i2c0_SCL 5
 
+#define eLED 11 
+#define wLED 12
+#define sLED 13
+
 /* i2c Protocol */
 #define I2C_PORT i2c0
 static const int i2c_baudrate = 400000;

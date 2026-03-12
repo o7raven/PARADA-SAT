@@ -1,4 +1,5 @@
 // C headers
+#include <hardware/gpio.h>
 #include <stdio.h>
 
 // Pico SDK headers
@@ -19,6 +20,8 @@
 
 #include "telemetry.h"
 
+void debugLED(uint8_t code);
+int64_t led_off_callback(alarm_id_t id, void *user_data);
 
 
 int main(void) {
@@ -38,25 +41,11 @@ int main(void) {
     gps_data_t gps_d;
 
     while(1){
-        // fix magic number
         mpu6050_load_data(&mpu_d);
-        printf("\n-----------------------------\n");
-        printf("[MPU] Acceleration: X: %6.2f Y: %6.2f Z: %6.2f\n",mpu_d.acc_X, mpu_d.acc_Y, mpu_d.acc_Z);
-        printf("[MPU] Gyro: X: %6.2f Y: %6.2f Z: %6.2f", mpu_d.gyro_X, mpu_d.gyro_Y, mpu_d.gyro_Z);
-        printf("\n-----------------------------\n");
-
         bme280_load_data(&dev,&comp_data);
-        printf("[BME]Temperature:   %lf deg C\n", comp_data.temperature);
-        printf("[BME]Humidity:   %lf %%RH\n", comp_data.humidity);
-        printf("[BME]Pressure:  %lf Pa", comp_data.pressure);
-        printf("\n-----------------------------\n");
-
         gps_update(&gps_d);
-        printf("GPS lat lon : %d %d\n", gps_d.lat, gps_d.lon);
-
         telemetry_packet_t packet = create_packet(&mpu_d, &comp_data, &gps_d);
         send_packet(&packet);
-
         sleep_ms(450);
     }
 
