@@ -87,7 +87,9 @@ static const uint8_t gyro_reg_len = 6;
     Telemetry config
 */
 #define PACKET_SCALE 100 // Defines the accuracy of floats over UART
-
+#define SEND_DELAY 450
+#define SERIAL_SYNC_BYTES 0xAA55
+#define TELEMETRY_UART_PORT uart0
 
 
 #endif

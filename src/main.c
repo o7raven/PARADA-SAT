@@ -46,7 +46,7 @@ int main(void) {
         gps_update(&gps_d);
         telemetry_packet_t packet = create_packet(&mpu_d, &comp_data, &gps_d);
         send_packet(&packet);
-        sleep_ms(450);
+        sleep_ms(SEND_DELAY);
     }
 
     return 0;

@@ -1,8 +1,8 @@
 #include "telemetry.h"
+#include "config.h"
 #include <string.h>
 telemetry_packet_t create_packet(mpu_data *mpu_d, struct bme280_data *bme_d, 
                                     gps_data_t *gps_d){
-    debugLED(wLED);
     static uint16_t _id = 1;
     telemetry_packet_t packet = {
         _id++,
@@ -43,24 +43,23 @@ uint16_t crc16(const uint8_t *data, size_t len)
                 crc <<= 1;
         }
     }
-
+    debugLED(sLED);
     return crc;
 }
 
-#define SYNC 0xAA55
 void send_packet(telemetry_packet_t *packet){
     debugLED(wLED);
-    uint8_t buff[64];
-    size_t i = 0;
+    uint8_t serial_buffer[64];
+    size_t memory_space = 0;
     const uint8_t len = sizeof(telemetry_packet_t);
 
-    buff[i++] = (SYNC >> 8) & 0xFF;
-    buff[i++] = SYNC & 0xFF;
+    serial_buffer[memory_space++] = (SERIAL_SYNC_BYTES >> 8) & 0xFF;
+    serial_buffer[memory_space++] = SERIAL_SYNC_BYTES & 0xFF;
 
-    buff[i++] = len;
-    memcpy(&buff[i], packet, len);
-    i += len;
+    serial_buffer[memory_space++] = len;
+    memcpy(&serial_buffer[memory_space], packet, len);
+    memory_space += len;
 
-    uart_write_blocking(uart0, buff, i);
+    uart_write_blocking(TELEMETRY_UART_PORT, serial_buffer, memory_space);
     debugLED(sLED);
 }

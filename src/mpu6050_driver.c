@@ -6,8 +6,8 @@ void mpu6050_initialize_full(void){
     i2c_write_blocking(I2C_PORT, mpu_slave_addr, &mpu_who_am_i_reg, 1, true);
     uint8_t data[1];
     i2c_read_blocking(I2C_PORT, mpu_slave_addr, data, 1, false);
+    debugLED(sLED);
     
-    printf("[+] --- MPU6050 Chip id: 0x%X", data[0]);
     if(data[0] == mpu_chip_id){
         // wake up device
         uint8_t buffer[2] = {mpu_pwr_mgmt_reg, 0x00};
@@ -29,7 +29,7 @@ void mpu6050_initialize_full(void){
         i2c_write_blocking(I2C_PORT, mpu_slave_addr, buffer, 2, false);
         
     }else{
-        printf("[!] --- MPU6050 Chip not found");
+        debugLED(eLED);
     }
 
 }
