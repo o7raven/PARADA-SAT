@@ -1,1 +1,4 @@
 build/
+.clangd
+pico_sdk_import.cmake
+.cache/
